@@ -15,8 +15,6 @@ router.post('/login', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    console.log(username, password);
-
     const user = await knex('users')
       .where('username', username)
       .returning('*');
@@ -28,12 +26,13 @@ router.post('/login', async (req, res) => {
         { exp: Math.floor(Date.now() / 1000) + 60 * 60, id: user[0].id },
         JWTutil.JWT_KEY,
       );
-      res.json({ token });
+      delete user[0].hashed_password;
+      const profile = user[0];
+      res.json({ token, profile });
     } else {
       return res.sendStatus(400);
     }
   } catch (error) {
-    console.log(error.message);
     res.sendStatus(400);
   }
 });

@@ -10,6 +10,10 @@ const users = require('./routes/users');
 
 const authentication = require('./routes/authentication');
 
+const pins = require('./routes/pins');
+
+const comments = require('./routes/comments');
+
 const server = express();
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
@@ -17,8 +21,8 @@ server.use(cors());
 
 server.use(authentication);
 server.use(users);
-// server.use(pins);
-// server.use(comments);
+server.use(pins);
+server.use(comments);
 
 server.all('*', (req, res) => {
   res.sendStatus('405');
