@@ -6,12 +6,21 @@ const cors = require('cors');
 
 const PORT = parseInt(process.env.PORT, 10) || 8000;
 
+const users = require('./routes/users');
+
+const authentication = require('./routes/authentication');
+
 const server = express();
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 server.use(cors());
 
-server.all('*', (res) => {
+server.use(authentication);
+server.use(users);
+// server.use(pins);
+// server.use(comments);
+
+server.all('*', (req, res) => {
   res.sendStatus('405');
 });
 
